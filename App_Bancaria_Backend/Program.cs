@@ -1,35 +1,37 @@
 using App_Bancaria_Backend.Data;
+using App_Bancaria_Backend.Repositories.Security;
+using App_Bancaria_Backend.Services.Security;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+// 🔹 DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+// 🔹 Servicios de la API
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// 🔹 Inyección de dependencias
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 🔹 Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
-    app.MapGet("/", () => Results.Redirect("/swagger"));
 }
 
+// 🔹 Middleware
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
+// 🔹 Map controllers
 app.MapControllers();
 
 app.Run();

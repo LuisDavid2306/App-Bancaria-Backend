@@ -7,9 +7,10 @@ namespace App_Bancaria_Backend.Models
     {
         [Key]
         public int IdAporte { get; set; }
+
         public string CodAporte { get; set; }
 
-        [ForeignKey ("Transaccion")]
+        [ForeignKey("Transaccion")]
         public int IdTransaccion { get; set; }
         public virtual Transaccion Transaccion { get; set; }
 
@@ -22,6 +23,6 @@ namespace App_Bancaria_Backend.Models
         public virtual Usuario Usuario { get; set; }
 
         public decimal Monto { get; set; }
-        public DateTime fecha { get; set; }
+        public DateTime Fecha { get; set; }
     }
 }

@@ -6,6 +6,7 @@ namespace App_Bancaria_Backend.Models
     {
         [Key]
         public int IdUsuario { get; set; }
+
         public string CodUsuario { get; set; }
         public string Token { get; set; }
         public string Nombre { get; set; }
@@ -17,5 +18,12 @@ namespace App_Bancaria_Backend.Models
         public DateTime FechaRegistro { get; set; }
         public bool FlgEstado { get; set; }
         public bool FlgEli { get; set; }
+
+        // Relaciones
+        public virtual Cuenta Cuenta { get; set; }
+        public virtual ICollection<Aporte> Aportes { get; set; }
+        public virtual ICollection<GrupoMiembro> GruposMiembro { get; set; }
+        public virtual ICollection<GrupoAdministrador> GruposAdmin { get; set; }
+        public virtual ICollection<RetiroAprobacion> Aprobaciones { get; set; }
     }
 }
