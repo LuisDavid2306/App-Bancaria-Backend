@@ -25,6 +25,19 @@ namespace App_Bancaria_Backend.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<TipoTransaccion>().HasData(
+                new TipoTransaccion { IdTipoTransaccion = 1, CodTipoTransaccion = "T001", Nombre = "Transferencia" },
+                new TipoTransaccion { IdTipoTransaccion = 2, CodTipoTransaccion = "T002", Nombre = "Aporte" },
+                new TipoTransaccion { IdTipoTransaccion = 3, CodTipoTransaccion = "T003", Nombre = "Retiro" },
+                new TipoTransaccion { IdTipoTransaccion = 4, CodTipoTransaccion = "T004", Nombre = "Recarga" }
+            );
+
+            modelBuilder.Entity<Retiro>()
+            .HasOne(r => r.Usuario)
+            .WithMany()
+            .HasForeignKey(r => r.IdUsuarioSolicitante)
+            .OnDelete(DeleteBehavior.NoAction);
+
             // 🔥 1. Relación 1:1 Usuario - Cuenta
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Cuenta)

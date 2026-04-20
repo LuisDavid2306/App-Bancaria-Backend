@@ -1,6 +1,7 @@
 ﻿using App_Bancaria_Backend.DTOs.Security;
 using App_Bancaria_Backend.Services.Security;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace App_Bancaria_Backend.Controllers
 {
@@ -15,6 +16,7 @@ namespace App_Bancaria_Backend.Controllers
             _authService = authService;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
@@ -26,6 +28,7 @@ namespace App_Bancaria_Backend.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {

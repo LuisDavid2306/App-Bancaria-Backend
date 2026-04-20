@@ -8,7 +8,6 @@ namespace App_Bancaria_Backend.Models
         public int IdUsuario { get; set; }
 
         public string CodUsuario { get; set; }
-        public string Token { get; set; }
         public string Nombre { get; set; }
         public string ApePat { get; set; }
         public string ApeMate { get; set; }

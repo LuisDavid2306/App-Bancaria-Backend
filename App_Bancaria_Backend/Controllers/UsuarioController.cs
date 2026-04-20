@@ -1,24 +1,36 @@
-﻿using App_Bancaria_Backend.Data;
+﻿using App_Bancaria_Backend.Services;
+using App_Bancaria_Backend.Services.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
-namespace App_Bancaria_Backend.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class UsuarioController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsuarioController : Controller
+    private readonly UsuarioService _service;
+
+    public UsuarioController(UsuarioService service)
     {
-        private readonly AppDbContext _context;
+        _service = service;
+    }
 
-        public UsuarioController(AppDbContext context)
-        {
-            _context = context;
-        }
+    [Authorize]
+    [HttpGet("saldo")]
+    public async Task<IActionResult> ObtenerSaldo()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
 
-        [HttpGet]
-        public IActionResult GetUsuarios()
-        {
-            var usuarios = _context.Usuario.ToList();
-            return Ok(usuarios);
-        }
+        if (userIdClaim == null)
+            return Unauthorized("Token inválido");
+
+        var userId = int.Parse(userIdClaim.Value);
+
+        var result = await _service.ObtenerSaldoAsync(userId);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
     }
 }

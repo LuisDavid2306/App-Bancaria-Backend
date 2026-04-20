@@ -4,6 +4,7 @@ using App_Bancaria_Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App_Bancaria_Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260419200553_AddUsuarioSolicitanteManual")]
+    partial class AddUsuarioSolicitanteManual
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -154,9 +157,6 @@ namespace App_Bancaria_Backend.Migrations
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("FlgEli")
-                        .HasColumnType("bit");
 
                     b.Property<decimal>("MontoActual")
                         .HasPrecision(18, 2)
@@ -299,32 +299,6 @@ namespace App_Bancaria_Backend.Migrations
                     b.HasKey("IdTipoTransaccion");
 
                     b.ToTable("TipoTransaccion");
-
-                    b.HasData(
-                        new
-                        {
-                            IdTipoTransaccion = 1,
-                            CodTipoTransaccion = "T001",
-                            Nombre = "Transferencia"
-                        },
-                        new
-                        {
-                            IdTipoTransaccion = 2,
-                            CodTipoTransaccion = "T002",
-                            Nombre = "Aporte"
-                        },
-                        new
-                        {
-                            IdTipoTransaccion = 3,
-                            CodTipoTransaccion = "T003",
-                            Nombre = "Retiro"
-                        },
-                        new
-                        {
-                            IdTipoTransaccion = 4,
-                            CodTipoTransaccion = "T004",
-                            Nombre = "Recarga"
-                        });
                 });
 
             modelBuilder.Entity("App_Bancaria_Backend.Models.Transaccion", b =>
@@ -416,6 +390,10 @@ namespace App_Bancaria_Backend.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

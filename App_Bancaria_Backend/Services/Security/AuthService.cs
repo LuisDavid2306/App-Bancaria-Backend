@@ -1,9 +1,13 @@
-﻿using App_Bancaria_Backend.DTOs.Base;
+﻿using App_Bancaria_Backend.Data;
+using App_Bancaria_Backend.DTOs.Base;
 using App_Bancaria_Backend.DTOs.Security;
 using App_Bancaria_Backend.Models;
-using App_Bancaria_Backend.Data;
 using App_Bancaria_Backend.Repositories.Security;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace App_Bancaria_Backend.Services.Security
 {
@@ -11,15 +15,13 @@ namespace App_Bancaria_Backend.Services.Security
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly AppDbContext _context;
-        public AuthService(IUsuarioRepository usuarioRepository)
-        {
-            _usuarioRepository = usuarioRepository;
-        }
+        private readonly IConfiguration _configuration;
 
-        public AuthService(IUsuarioRepository usuarioRepository, AppDbContext context)
+        public AuthService(IUsuarioRepository usuarioRepository, AppDbContext context, IConfiguration configuration)
         {
             _usuarioRepository = usuarioRepository;
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task<ApiResponse<LoginResponseDto>> LoginAsync(LoginRequestDto request)
@@ -36,7 +38,7 @@ namespace App_Bancaria_Backend.Services.Security
             {
                 IdUsuario = usuario.IdUsuario,
                 Nombre = usuario.Nombre + ' ' + usuario.ApePat +' '+ usuario.ApePat,
-                Token = Guid.NewGuid().ToString()
+                Token = GenerarToken(usuario)
             };
 
             return new ApiResponse<LoginResponseDto>(true, "Login exitoso", response);
@@ -62,7 +64,6 @@ namespace App_Bancaria_Backend.Services.Security
                 NroTelefono = request.NroTelefono,
                 Email = request.Email,
                 PasswordHash = request.Password,
-                Token = request.Token,
                 FlgEstado = false,
                 FlgEli = false
             };
@@ -92,5 +93,35 @@ namespace App_Bancaria_Backend.Services.Security
 
             return new ApiResponse<RegisterResponseDto>(true, "Usuario registrado correctamente", response);
         }
+
+        private string GenerarToken(Usuario usuario)
+        {
+            var jwtSettings = _configuration.GetSection("Jwt");
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, usuario.IdUsuario.ToString()),
+                new Claim(ClaimTypes.Email, usuario.Email)
+            };
+
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtSettings["Key"])
+            );
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(
+                    Convert.ToDouble(jwtSettings["ExpiresInMinutes"])
+                ),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
     }
 }
