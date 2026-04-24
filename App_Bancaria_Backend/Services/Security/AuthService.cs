@@ -114,7 +114,7 @@ namespace App_Bancaria_Backend.Services.Security
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(
+                expires: DateTime.UtcNow.AddMinutes(
                     Convert.ToDouble(jwtSettings["ExpiresInMinutes"])
                 ),
                 signingCredentials: creds
