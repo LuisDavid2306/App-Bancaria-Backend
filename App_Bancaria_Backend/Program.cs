@@ -89,10 +89,13 @@ builder.Services.AddScoped<GrupoAhorrosService>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<AdminService>();
 
-var app = builder.Build();
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    var port = Environment.GetEnvironmentVariable("PORT") ?? "10000";
+    serverOptions.ListenAnyIP(int.Parse(port));
+});
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Urls.Add($"http://*:{port}");
+var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
