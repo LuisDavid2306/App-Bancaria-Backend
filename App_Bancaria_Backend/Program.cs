@@ -19,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args); // 🔥 PRIMERO
 // 🔐 JWT CONFIG
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -90,12 +91,11 @@ builder.Services.AddScoped<AdminService>();
 
 var app = builder.Build();
 
-// 🔹 Swagger
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://*:{port}");
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // 🔹 Middleware
 app.UseHttpsRedirection();
