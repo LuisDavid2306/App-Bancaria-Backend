@@ -97,14 +97,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 
 var app = builder.Build();
 
-app.UseExceptionHandler(errorApp =>
-{
-    errorApp.Run(async context =>
-    {
-        var error = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
-        await context.Response.WriteAsync(error?.Error.ToString());
-    });
-});
+app.UseDeveloperExceptionPage();
 
 app.UseSwagger();
 app.UseSwaggerUI();
