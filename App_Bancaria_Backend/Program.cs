@@ -101,10 +101,10 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 // 🔹 Middleware
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication(); // 🔥 IMPORTANTE
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapGet("/", () => "API funcionando 🚀");
 app.Run();
