@@ -18,17 +18,16 @@ namespace App_Bancaria_Backend.Services.Admin
             _context = context;
         }
 
-        public async Task<ApiResponse<List<UsuarioAdminDto>>> ObtenerUsuariosAsync()
+        public async Task<ApiResponse<List<UsuarioAdminDto>>> ObtenerUsuariosAsync(string? search)
         {
-            var data = await _repo.GetUsuariosAsync();
+            var data = await _repo.GetUsuariosAsync(search);
 
             return new ApiResponse<List<UsuarioAdminDto>>(true, "OK", data);
         }
 
-        public async Task<ApiResponse<List<TransaccionAdminDto>>> ObtenerTransaccionesAsync()
+        public async Task<ApiResponse<List<TransaccionAdminDto>>> ObtenerTransaccionesAsync(DateTime? inicio, DateTime? fin, string? tipo, string? usuario)
         {
-            var data = await _repo.GetTransaccionesAsync();
-
+            var data = await _repo.GetTransaccionesAsync(inicio, fin, tipo, usuario);
             return new ApiResponse<List<TransaccionAdminDto>>(true, "OK", data);
         }
         public async Task<ApiResponse<List<GrupoAdminDto>>> ObtenerGruposAsync()
@@ -37,10 +36,9 @@ namespace App_Bancaria_Backend.Services.Admin
 
             return new ApiResponse<List<GrupoAdminDto>>(true, "OK", data);
         }
-        public async Task<ApiResponse<DashboardDto>> ObtenerDashboardAsync()
+        public async Task<ApiResponse<DashboardDto>> ObtenerDashboardAsync(DateTime? fechaInicio, DateTime? fechaFin)
         {
-            var data = await _repo.GetDashboardAsync();
-
+            var data = await _repo.GetDashboardAsync(fechaInicio, fechaFin);
             return new ApiResponse<DashboardDto>(true, "OK", data);
         }
         public async Task<ApiResponse<string>> CrearUsuarioAsync(CrearUsuarioAdminDto dto)
@@ -98,6 +96,11 @@ namespace App_Bancaria_Backend.Services.Admin
             if (usuario == null)
                 return new ApiResponse<string>(false, "Usuario no existe", null);
 
+            if (usuario.Cuenta == null || usuario.Cuenta.Saldo > 0)
+            {
+                return new ApiResponse<string>(false, "No se puede eliminar usuario con saldo", null);
+            }
+
             usuario.FlgEli = true;
 
             await _repo.SaveChangesAsync();
@@ -116,6 +119,15 @@ namespace App_Bancaria_Backend.Services.Admin
             await _repo.SaveChangesAsync();
 
             return new ApiResponse<string>(true, "Grupo eliminado", "OK");
+        }
+        public async Task<ApiResponse<GrupoDetalleDto>> ObtenerGrupoDetalleAsync(string codgrupo)
+        {
+            var data = await _repo.GetGrupoDetalleAsync(codgrupo);
+
+            if (data == null)
+                return new ApiResponse<GrupoDetalleDto>(false, "Grupo no encontrado", null);
+
+            return new ApiResponse<GrupoDetalleDto>(true, "OK", data);
         }
     }
 }

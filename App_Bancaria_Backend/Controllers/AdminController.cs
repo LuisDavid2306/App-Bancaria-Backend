@@ -19,17 +19,16 @@ namespace App_Bancaria_Backend.Controllers
 
         [Authorize]
         [HttpGet("usuarios")]
-        public async Task<IActionResult> GetUsuarios()
+        public async Task<IActionResult> GetUsuarios(string? search)
         {
-            var result = await _service.ObtenerUsuariosAsync();
+            var result = await _service.ObtenerUsuariosAsync(search);
             return Ok(result);
         }
 
-        [Authorize]
         [HttpGet("transacciones")]
-        public async Task<IActionResult> GetTransacciones()
+        public async Task<IActionResult> GetTransacciones(DateTime? fechaInicio, DateTime? fechaFin, string? tipo, string? usuario)
         {
-            var result = await _service.ObtenerTransaccionesAsync();
+            var result = await _service.ObtenerTransaccionesAsync(fechaInicio, fechaFin, tipo, usuario);
             return Ok(result);
         }
 
@@ -50,11 +49,12 @@ namespace App_Bancaria_Backend.Controllers
 
         [Authorize]
         [HttpGet("dashboard")]
-        public async Task<IActionResult> GetDashboard()
+        public async Task<IActionResult> GetDashboard(DateTime? fechaInicio, DateTime? fechaFin)
         {
-            var result = await _service.ObtenerDashboardAsync();
+            var result = await _service.ObtenerDashboardAsync(fechaInicio, fechaFin);
             return Ok(result);
         }
+
         [HttpPost("usuarios")]
         public async Task<IActionResult> CrearUsuario(CrearUsuarioAdminDto dto)
         {
@@ -73,6 +73,12 @@ namespace App_Bancaria_Backend.Controllers
         public async Task<IActionResult> EliminarUsuario(int id)
         {
             var result = await _service.EliminarUsuarioAsync(id);
+            return Ok(result);
+        }
+        [HttpGet("grupos/{codgrupo}")]
+        public async Task<IActionResult> GetGrupoDetalle(string codgrupo)
+        {
+            var result = await _service.ObtenerGrupoDetalleAsync(codgrupo);
             return Ok(result);
         }
     }
