@@ -37,7 +37,7 @@ namespace App_Bancaria_Backend.Services.Security
             var response = new LoginResponseDto
             {
                 IdUsuario = usuario.IdUsuario,
-                Nombre = usuario.Nombre + ' ' + usuario.ApePat +' '+ usuario.ApePat,
+                Nombre = usuario.Nombre + ' ' + usuario.ApePat +' '+ usuario.ApeMate,
                 Correo = usuario.Email,
                 Token = GenerarToken(usuario)
             };
