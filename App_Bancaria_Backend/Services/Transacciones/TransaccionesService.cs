@@ -128,7 +128,7 @@ public class TransaccionesService
             Monto = t.Monto,
             Descripcion = t.Descripcion,
             Fecha = t.Fecha,
-            EsIngreso = t.IdCuentaDestino == usuario.Cuenta.IdCuenta || t.IdTipoTransaccion == '4'
+            EsIngreso = t.IdCuentaDestino == usuario.Cuenta.IdCuenta || t.IdTipoTransaccion == 4
         }).ToList();
 
         return new ApiResponse<List<HistorialDto>>(true, "OK", historial);
