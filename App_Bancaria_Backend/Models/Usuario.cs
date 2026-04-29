@@ -18,7 +18,6 @@ namespace App_Bancaria_Backend.Models
         public bool FlgEstado { get; set; }
         public bool FlgEli { get; set; }
 
-        // Relaciones
         public virtual Cuenta Cuenta { get; set; }
         public virtual ICollection<Aporte> Aportes { get; set; }
         public virtual ICollection<GrupoMiembro> GruposMiembro { get; set; }

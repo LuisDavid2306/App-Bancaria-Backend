@@ -46,7 +46,6 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 await _repo.AddGrupoAsync(grupo);
                 await _repo.SaveChangesAsync();
 
-                // 👤 agregar como miembro
                 var miembro = new GrupoMiembro
                 {
                     CodGrupoMiembro = Guid.NewGuid().ToString(),
@@ -57,7 +56,6 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
 
                 await _repo.AddMiembroAsync(miembro);
 
-                // 👑 agregar como admin
                 var admin = new GrupoAdministrador
                 {
                     CodGrupoAdmin = Guid.NewGuid().ToString(),
@@ -140,13 +138,10 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 if (tipo == null)
                     return new ApiResponse<string>(false, "Tipo de transacción no configurado", null);
 
-                // 💸 descontar saldo
                 usuario.Cuenta.Saldo -= dto.Monto;
 
-                // 💰 sumar al grupo
                 grupo.MontoActual += dto.Monto;
 
-                // 🧾 crear transacción
                 var transaccion = new Transaccion
                 {
                     CodTransaccion = Guid.NewGuid().ToString(),
@@ -161,7 +156,6 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 await _transRepo.AddTransaccion(transaccion);
                 await _repo.SaveChangesAsync();
 
-                // 💰 crear aporte
                 var aporte = new Aporte
                 {
                     CodAporte = Guid.NewGuid().ToString(),
@@ -225,7 +219,7 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 {
                     CodRetiro = Guid.NewGuid().ToString(),
                     IdGrupo = dto.IdGrupo,
-                    IdUsuarioSolicitante = userId, // 🔥 IMPORTANTÍSIMO
+                    IdUsuarioSolicitante = userId,
                     Monto = dto.Monto,
                     Estado = "Pendiente",
                     FechaSolicitud = DateTime.Now
@@ -256,20 +250,17 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 if (retiro.Estado != "Pendiente")
                     return new ApiResponse<string>(false, "El retiro ya fue procesado", null);
 
-                // 🔒 validar admin
                 var esAdmin = await _context.GrupoAdministrador
                     .AnyAsync(x => x.IdGrupo == retiro.IdGrupo && x.IdUsuario == userId);
 
                 if (!esAdmin)
                     return new ApiResponse<string>(false, "No eres administrador", null);
 
-                // 🚫 evitar doble voto
                 var yaAprobo = await _repo.YaAprobo(userId, dto.IdRetiro);
 
                 if (yaAprobo)
                     return new ApiResponse<string>(false, "Ya aprobaste este retiro", null);
 
-                // 🗳 registrar aprobación
                 var aprobacion = new RetiroAprobacion
                 {
                     CodAprobacion = Guid.NewGuid().ToString(),
@@ -282,7 +273,6 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 await _repo.AddAprobacionAsync(aprobacion);
                 await _repo.SaveChangesAsync();
 
-                // 👇 AQUÍ VA
                 if (!dto.Aprobado)
                 {
                     retiro.Estado = "Rechazado";
@@ -292,11 +282,9 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                     return new ApiResponse<string>(true, "Retiro rechazado", "OK");
                 }
 
-                // 📊 contar
                 var totalAdmins = await _repo.CantidadAdmins(retiro.IdGrupo);
                 var totalAprobaciones = await _repo.CantidadAprobaciones(dto.IdRetiro);
 
-                // 🔥 SI TODOS APRUEBAN → EJECUTAR
                 if (totalAdmins == totalAprobaciones)
                 {
                     var grupo = await _repo.GetGrupoById(retiro.IdGrupo);
@@ -308,7 +296,6 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                     if (grupo == null || usuarioSolicitante == null)
                         return new ApiResponse<string>(false, "Error al procesar retiro", null);
 
-                    // 💸 mover dinero
                     grupo.MontoActual -= retiro.Monto;
                     usuarioSolicitante.Cuenta.Saldo += retiro.Monto;
 

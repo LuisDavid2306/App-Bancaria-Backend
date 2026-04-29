@@ -121,11 +121,11 @@ namespace App_Bancaria_Backend.Repositories.Admin
 
             var transaccionesPorDia = data.Select(x => new TransaccionesPorDiaDto
             {
-                Fecha = x.Fecha.ToString("yyyy-MM-dd"), // ✅ aquí sí funciona
+                Fecha = x.Fecha.ToString("yyyy-MM-dd"),
                 Cantidad = x.Cantidad
             }).ToList();
 
-            // 💰 dinero total en cuentas
+            
             var totalDinero = await _context.Cuenta
                                 .Select(c => (decimal?)c.Saldo)
                                 .SumAsync() ?? 0;
@@ -252,7 +252,7 @@ namespace App_Bancaria_Backend.Repositories.Admin
                 {
                     Usuario = r.Usuario != null ? r.Usuario.Nombre : "N/A",
                     Monto = r.Monto,
-                    Fecha = r.FechaSolicitud, // ✅ CORRECTO
+                    Fecha = r.FechaSolicitud,
                     Estado = r.Estado
                 })
                 .ToList(),

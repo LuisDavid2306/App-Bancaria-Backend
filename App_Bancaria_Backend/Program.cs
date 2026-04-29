@@ -14,9 +14,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args); // 🔥 PRIMERO
+var builder = WebApplication.CreateBuilder(args); 
 
-// 🔐 JWT CONFIG
+
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
 
@@ -38,15 +38,15 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(
         Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "CLAVE_TEMPORAL_123456")
     ),
-        ClockSkew = TimeSpan.Zero // 🔥 IMPORTANTE
+        ClockSkew = TimeSpan.Zero
     };
 });
 
-// 🔹 DbContext
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔹 Servicios
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -77,7 +77,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 });
 
-// 🔹 DI
+
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ITransaccionesRepository, TransaccionesRepository>();
@@ -102,13 +102,12 @@ app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// 🔹 Middleware
-//app.UseHttpsRedirection();
-app.UseAuthentication(); // 🔥 IMPORTANTE
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapGet("/", () => "API funcionando 🚀");
+app.MapGet("/", () => "BACKEND ACTIVO");
 
 
 

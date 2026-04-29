@@ -39,7 +39,6 @@ public class TransaccionesService
             if (usuarioOrigen.Cuenta.Saldo < dto.Monto)
                 return new ApiResponse<string>(false, "Saldo Insuficiente", null);
 
-            // 💸 lógica de negocio
             usuarioOrigen.Cuenta.Saldo -= dto.Monto;
             usuarioDestino.Cuenta.Saldo += dto.Monto;
 
@@ -87,14 +86,13 @@ public class TransaccionesService
             if (tipo == null)
                 return new ApiResponse<string>(false, "Tipo de transacción no configurado", null);
 
-            // 💰 SUMAR saldo
             usuario.Cuenta.Saldo += dto.Monto;
 
             var transaccion = new Transaccion
             {
                 CodTransaccion = Guid.NewGuid().ToString(),
-                IdCuentaOrigen = usuario.Cuenta.IdCuenta, // mismo origen
-                IdCuentaDestino = null, // no hay destino
+                IdCuentaOrigen = usuario.Cuenta.IdCuenta,
+                IdCuentaDestino = null, 
                 Monto = dto.Monto,
                 IdTipoTransaccion = tipo.IdTipoTransaccion,
                 Descripcion = tipo.Nombre,
@@ -130,7 +128,7 @@ public class TransaccionesService
             Monto = t.Monto,
             Descripcion = t.Descripcion,
             Fecha = t.Fecha,
-            EsIngreso = t.IdCuentaDestino == usuario.Cuenta.IdCuenta
+            EsIngreso = t.IdCuentaDestino == usuario.Cuenta.IdCuenta || t.IdTipoTransaccion == '4'
         }).ToList();
 
         return new ApiResponse<List<HistorialDto>>(true, "OK", historial);

@@ -17,8 +17,6 @@ namespace App_Bancaria_Backend.Models
         public decimal Saldo { get; set; }
         public DateTime FechaCreacion { get; set; }
         public string CodQR { get; set; }
-
-        // Relaciones
         public virtual ICollection<Transaccion> TransaccionesOrigen { get; set; }
         public virtual ICollection<Transaccion> TransaccionesDestino { get; set; }
     }

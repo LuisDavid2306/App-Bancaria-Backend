@@ -18,7 +18,7 @@ namespace App_Bancaria_Backend.Models
 
         public int? IdUsuarioSolicitante { get; set; }
 
-        [ForeignKey("IdUsuarioSolicitante")] // ✅ CORRECTO
+        [ForeignKey("IdUsuarioSolicitante")]
         public virtual Usuario Usuario { get; set; }
         public virtual ICollection<RetiroAprobacion> Aprobaciones { get; set; }
     }
