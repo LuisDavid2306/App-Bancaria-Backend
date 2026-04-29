@@ -111,5 +111,24 @@ namespace App_Bancaria_Backend.Controllers
 
             return Ok(result);
         }
+
+        [Authorize]
+        [HttpGet("mis-grupos")]
+        public async Task<IActionResult> MisGrupos()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+
+            if (userIdClaim == null)
+                return Unauthorized("Token inválido");
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            var result = await _service.ObtenerMisGruposAsync(userId);
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

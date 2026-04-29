@@ -314,5 +314,21 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 return new ApiResponse<string>(false, "Error al aprobar retiro", null);
             }
         }
+
+        public async Task<ApiResponse<List<MisGruposDto>>> ObtenerMisGruposAsync(int userId)
+        {
+            var grupos = await _context.GrupoMiembro
+                .Where(gm => gm.IdUsuario == userId)
+                .Select(gm => new MisGruposDto
+                {
+                    IdGrupo = gm.GrupoAhorro.IdGrupo,
+                    Nombre = gm.GrupoAhorro.Nombre,
+                    MontoActual = gm.GrupoAhorro.MontoActual,
+                    MontoObjetivo = gm.GrupoAhorro.MontoObjetivo
+                })
+                .ToListAsync();
+
+            return new ApiResponse<List<MisGruposDto>>(true, "OK", grupos);
+        }
     }
 }
