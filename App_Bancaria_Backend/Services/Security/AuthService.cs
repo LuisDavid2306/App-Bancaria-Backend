@@ -38,6 +38,7 @@ namespace App_Bancaria_Backend.Services.Security
             {
                 IdUsuario = usuario.IdUsuario,
                 Nombre = usuario.Nombre + ' ' + usuario.ApePat +' '+ usuario.ApePat,
+                Correo = usuario.Email,
                 Token = GenerarToken(usuario)
             };
 
