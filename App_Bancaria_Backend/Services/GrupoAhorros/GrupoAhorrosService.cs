@@ -81,12 +81,12 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
         {
             try
             {
-                var grupo = await _repo.GetGrupoById(dto.IdGrupo);
+                var grupo = await _repo.GetGrupoByCodGrupo(dto.codGrupo);
 
                 if (grupo == null)
                     return new ApiResponse<string>(false, "Grupo no existe", null);
 
-                var yaExiste = await _repo.ExisteMiembro(userId, dto.IdGrupo);
+                var yaExiste = await _repo.ExisteMiembro(userId, grupo.IdGrupo);
 
                 if (yaExiste)
                     return new ApiResponse<string>(false, "Ya perteneces a este grupo", null);
@@ -94,7 +94,7 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 var miembro = new GrupoMiembro
                 {
                     CodGrupoMiembro = Guid.NewGuid().ToString(),
-                    IdGrupo = dto.IdGrupo,
+                    IdGrupo = grupo.IdGrupo,
                     IdUsuario = userId,
                     FechaUnion = DateTime.Now
                 };

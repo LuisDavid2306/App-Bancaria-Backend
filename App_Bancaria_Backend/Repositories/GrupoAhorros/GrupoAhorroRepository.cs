@@ -35,6 +35,11 @@ namespace App_Bancaria_Backend.Repositories.GrupoAhorros
             return await _context.GrupoAhorro
                 .FirstOrDefaultAsync(x => x.IdGrupo == idGrupo);
         }
+        public async Task<GrupoAhorro> GetGrupoByCodGrupo(string codGrupo)
+        {
+            return await _context.GrupoAhorro
+                .FirstOrDefaultAsync(x => x.CodGrupo == codGrupo);
+        }
         public async Task<Usuario> GetUsuarioConCuenta(int idUsuario)
         {
             return await _context.Usuario

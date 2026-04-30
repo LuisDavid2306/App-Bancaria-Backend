@@ -2,6 +2,6 @@
 {
     public class UnirseGrupoDto
     {
-        public int IdGrupo { get; set; }
+        public int codGrupo { get; set; }
     }
 }
