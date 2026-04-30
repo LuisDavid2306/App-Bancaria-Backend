@@ -324,7 +324,8 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                     IdGrupo = gm.GrupoAhorro.IdGrupo,
                     Nombre = gm.GrupoAhorro.Nombre,
                     MontoActual = gm.GrupoAhorro.MontoActual,
-                    MontoObjetivo = gm.GrupoAhorro.MontoObjetivo
+                    MontoObjetivo = gm.GrupoAhorro.MontoObjetivo,
+                    CantidadUsuarios = gm.GrupoAhorro.Miembros.Count()
                 })
                 .ToListAsync();
 
