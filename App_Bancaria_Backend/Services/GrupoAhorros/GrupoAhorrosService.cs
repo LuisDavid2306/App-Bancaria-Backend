@@ -322,6 +322,7 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                 .Select(gm => new MisGruposDto
                 {
                     IdGrupo = gm.GrupoAhorro.IdGrupo,
+                    CodGrupo = gm.GrupoAhorro.CodGrupo,
                     Nombre = gm.GrupoAhorro.Nombre,
                     MontoActual = gm.GrupoAhorro.MontoActual,
                     MontoObjetivo = gm.GrupoAhorro.MontoObjetivo,
