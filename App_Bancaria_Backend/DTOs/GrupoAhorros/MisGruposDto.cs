@@ -6,5 +6,6 @@
         public string Nombre { get; set; }
         public decimal MontoActual { get; set; }
         public decimal MontoObjetivo { get; set; }
+        public int CantidadUsuarios { get; set; }
     }
 }

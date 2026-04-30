@@ -17,6 +17,7 @@ namespace App_Bancaria_Backend.Repositories.Admin
         public async Task<List<UsuarioAdminDto>> GetUsuariosAsync(string? search)
         {
             var query = _context.Usuario
+                .Where(u => u.FlgEli != true && u.FlgEstado != true)
                 .Include(u => u.Cuenta)
                 .AsQueryable();
 
