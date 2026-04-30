@@ -9,7 +9,7 @@ namespace App_Bancaria_Backend.Repositories.GrupoAhorros
         Task AddAdministradorAsync(GrupoAdministrador admin);
         Task<bool> ExisteMiembro(int idUsuario, int idGrupo);
         Task<GrupoAhorro> GetGrupoById(int idGrupo);
-        Task<GrupoAhorro> GetGrupoByCodGrupo(int idGrupo);
+        Task<GrupoAhorro> GetGrupoByCodGrupo(string codGrupo);
         Task<Usuario> GetUsuarioConCuenta(int idUsuario);
         Task<bool> EsMiembro(int idUsuario, int idGrupo);
         Task<TipoTransaccion> GetTipoTransaccionPorNombre(string nombre);
