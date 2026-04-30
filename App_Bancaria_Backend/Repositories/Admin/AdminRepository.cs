@@ -127,9 +127,9 @@ namespace App_Bancaria_Backend.Repositories.Admin
             }).ToList();
 
             
-            var totalDinero = await _context.Cuenta
-                                .Select(c => (decimal?)c.Saldo)
-                                .SumAsync() ?? 0;
+            var totalDinero = await _context.Transaccion
+                                        .Where(t => t.IdTipoTransaccion == 4)
+                                        .SumAsync(t => t.Monto);
 
             var dineroData = await query
                 .GroupBy(t => t.Fecha.Date)
