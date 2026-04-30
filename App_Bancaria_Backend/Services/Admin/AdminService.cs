@@ -96,7 +96,7 @@ namespace App_Bancaria_Backend.Services.Admin
             if (usuario == null)
                 return new ApiResponse<string>(false, "Usuario no existe", null);
 
-            if (usuario.Cuenta == null || usuario.Cuenta.Saldo > 0)
+            if (_context.Cuenta.Any(c => c.IdUsuario == usuario.IdUsuario && c.Saldo > 0))
             {
                 return new ApiResponse<string>(false, "No se puede eliminar usuario con saldo", null);
             }
