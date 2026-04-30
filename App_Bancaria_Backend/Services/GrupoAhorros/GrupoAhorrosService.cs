@@ -328,7 +328,6 @@ namespace App_Bancaria_Backend.Services.GrupoAhorros
                     CantidadUsuarios = gm.GrupoAhorro.Miembros.Count()
                 })
                 .ToListAsync();
-
             return new ApiResponse<List<MisGruposDto>>(true, "OK", grupos);
         }
     }

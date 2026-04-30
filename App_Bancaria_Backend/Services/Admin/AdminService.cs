@@ -52,7 +52,7 @@ namespace App_Bancaria_Backend.Services.Admin
                 Email = dto.Email,
                 NroTelefono = dto.NroTelefono,
                 PasswordHash = dto.Password,
-                FlgEstado = true,
+                FlgEstado = false,
                 FlgEli = false
             };
 
