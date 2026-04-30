@@ -94,7 +94,7 @@ namespace App_Bancaria_Backend.Repositories.Admin
         }
         public async Task<DashboardDto> GetDashboardAsync(DateTime? fechaInicio, DateTime? fechaFin)
         {
-            var totalUsuarios = await _context.Usuario.CountAsync();
+            var totalUsuarios = await _context.Usuario.Where(u => u.FlgEli!=true || u.FlgEstado!=true).CountAsync();
             var totalTransacciones = await _context.Transaccion.CountAsync();
             var totalGrupos = await _context.GrupoAhorro.CountAsync();
 
