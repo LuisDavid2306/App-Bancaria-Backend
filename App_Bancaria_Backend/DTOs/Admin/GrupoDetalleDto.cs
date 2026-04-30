@@ -2,6 +2,7 @@
 {
     public class GrupoDetalleDto
     {
+        public int IdGrupo { get; set; }
         public string CodGrupo { get; set; }
         public string Nombre { get; set; }
         public decimal MontoActual { get; set; }

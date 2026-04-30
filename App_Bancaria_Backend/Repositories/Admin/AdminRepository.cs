@@ -225,6 +225,7 @@ namespace App_Bancaria_Backend.Repositories.Admin
 
             return new GrupoDetalleDto
             {
+                IdGrupo = grupo.IdGrupo,
                 CodGrupo = grupo.CodGrupo,
                 Nombre = grupo.Nombre,
                 MontoActual = grupo.MontoActual,
